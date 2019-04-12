@@ -8,120 +8,94 @@ var sequelize = require('../config/db');
 /**
  * 创建用户 model
  */
-var User_model = sequelize.define('user', {
+var Shuffling_model = sequelize.define('shuffling', {
     id: {
         type: Sequelize.STRING(255),
         primaryKey: true
     },
-    pid: Sequelize.STRING(255),
-    username: Sequelize.STRING(255),
-    password: Sequelize.STRING(255),
-    name: Sequelize.STRING(255),
-    city: Sequelize.STRING(255),
-    phone: Sequelize.STRING(255),
-    qq: Sequelize.STRING(255),
-    birthday: Sequelize.STRING(255),
-    money: Sequelize.STRING(255),
-    viplevel: Sequelize.STRING(1),
-    viptime: Sequelize.STRING(255),
-    lasttime: Sequelize.STRING(255),
+    bookid: Sequelize.STRING(255),
+    href:Sequelize.STRING(255),
+    src:Sequelize.STRING(255),
 }, {
     timestamps: false
 });
-class User {
+class Shuffling {
     constructor(params) {
         this.params = params;
     }
-
     async find() {
+        var shufflings = await Shuffling_model.findAll();
+        return shufflings;
+
         try {
-            var users = await User_model.findAll({
-                where: {
-                    id: this.params.sessionId
-                }
-            });
-            return users;
+            var shufflings = await Shuffling_model.findAll();
+            return shufflings;
         } catch (err) {
             return 1
         }
     }
 
+    // async add() {
+    //     try {
+    //         var now = Date.now();
+    //         var random = Math.round(Math.random() * 100)
+    //         now = (now + '' + random) * 1
+    //         await Shuffling_model.create({
+    //             id: now,
+    //             title: this.params.title,
+    //             author: this.params.author,
+    //             type: this.params.type,
+    //             introduce: this.params.introduce,
+    //             imgsrc: this.params.imgsrc,
+    //             epubsrc: this.params.epubsrc,
+    //             subscribe: this.params.subscribe,
+    //             collection: this.params.collection,
+    //             read: this.params.read,
+    //             recommended:this.params.recommended,
+    //             time: this.params.time,
+    //         });
+    //         return 0;
+    //     } catch (err) {
+    //         return 1;
+    //     }
+    // }
 
-    async findname() {
-        try {
-            var users = await User_model.findAll({
-                where: {
-                    username: this.params.username
-                }
-            });
-            return users;
-        } catch (err) {
-            return 1
-        }
-    }
+    // async delete() {
+    //     try {
+    //         var shufflings = await Shuffling_model.findAll({
+    //             where: {
+    //                 id: this.params.id
+    //             }
+    //         });
+    //
+    //         for (let b of shufflings) {
+    //             await b.destroy()
+    //         }
+    //
+    //         return 0;
+    //     } catch (err) {
+    //         return 1;
+    //     }
+    // }
 
-    async add() {
-        try {
-            var now = Date.now();
-            var random = Math.round(Math.random() * 100)
-            now = (now + '' + random) * 1
-            await User_model.create({
-                id: now,
-                pid: now,
-                username: this.params.username,
-                password: this.params.password,
-                name: this.params.name,
-                city: this.params.city,
-                phone: this.params.phone,
-                qq: this.params.qq,
-                birthday: this.params.birthday,
-                money: this.params.money,
-                viplevel:this.params.viplevel,
-                viptime: this.params.viptime,
-                lasttime: this.params.lasttime,
-            });
-            return 0;
-        } catch (err) {
-            return 1;
-        }
-    }
-
-    async delete() {
-        try {
-            var users = await User_model.findAll({
-                where: {
-                    id: this.params.id
-                }
-            });
-
-            for (let u of users) {
-                await u.destroy()
-            }
-
-            return 0;
-        } catch (err) {
-            return 1;
-        }
-    }
-
-    async update() {
-        try {
-            var users = await User_model.findAll({
-                where: {
-                    pid: this.params.id
-                }
-            });
-
-            for (let u of users) {
-                await u.update(this.params)
-            }
-
-
-            return 0;
-        } catch (err) {
-            return 1;
-        }
-    }
+    // async update() {
+    //     try {
+    //         var shufflings = await Shuffling_model.findAll({
+    //             where: {
+    //                 pid: this.params.id
+    //             }
+    //         });
+    //
+    //         for (let b of shufflings) {
+    //             await b.update(this.params)
+    //         }
+    //
+    //
+    //         return 0;
+    //     } catch (err) {
+    //         return 1;
+    //     }
+    // }
 
 }
-module.exports = User;
+module.exports = Shuffling;
