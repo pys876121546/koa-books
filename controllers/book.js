@@ -10,19 +10,34 @@ const Book = require('../model/Book');
  * @param next
  * @returns {Promise<{msg: string, path: string, status: number}>}
  */
+
+/**
+ * @getClientIP
+ * @desc 获取用户 ip 地址
+ * @param {Object} req - 请求
+ */
+function getClientIP(req) {
+    return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
+        req.connection.remoteAddress || // 判断 connection 的远程 IP
+        req.socket.remoteAddress || // 判断后端的 socket 的 IP
+        req.connection.socket.remoteAddress;
+};
+
+
 var fn_uoload = async (ctx, next) => {
     const file = ctx.request.files.file;	// 获取上传文件
     const reader = fs.createReadStream(file.path);	// 创建可读流
     const ext = file.name.split('.').pop();		// 获取上传文件扩展名
     //console.log(ext)
+    var url = 'http://'+getClientIP(ctx.request.req)+':3000'
     var upStream, path;
     var filename = Math.random().toString()
     if (ext == 'epub') {
         upStream = fs.createWriteStream(`static/epubs/${filename}.${ext}`);
-        path = `/api/epubs/${filename}.${ext}`// 创建可写流
+        path = url+`/epubs/${filename}.${ext}`// 创建可写流
     } else {
         upStream = fs.createWriteStream(`static/images/${filename}.${ext}`);
-        path = `/api/images/${filename}.${ext}`// 创建可写流
+        path = url+`/images/${filename}.${ext}`// 创建可写流
     }
 
     reader.pipe(upStream);	// 可读流通过管道写入可写流
